@@ -1,6 +1,7 @@
 # Import python packages
 import streamlit as st
 from snowflake.snowpark.functions import col
+import requests
 
 # Write directly to the app
 st.title("Customize Your Smoothie! 🍓")
@@ -15,6 +16,10 @@ cnx = st.connection("snowflake")
 session = cnx.session()
 # Get fruit options from Snowflake
 my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME')).collect()
+
+smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")
+st.text(smoothiesfroot_response.json())
+
 
 # Extract fruit names into a Python list
 fruit_list = [row['FRUIT_NAME'] for row in my_dataframe]
